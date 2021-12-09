@@ -1,24 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header';
+import Balance from './components/Balance';
+import IncomeExpenses from './components/IncomeExpenses';
+import TransactionList from './components/TransationList';
+import AddTransaction from './components/AddTransaction';
+import { GlobalProvider } from './context/GlobalState';
+import EditModal from './components/EditModal';
+import React, { useState } from 'react';
+import AddSaldoInicial from './components/AddSaldoInicial';
 
 function App() {
+  const [openModal, setOpenModal] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [saldoInicial, setSaldoInicial] = useState(0);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GlobalProvider className="globalProvider">
+      {!openModal && <Header />}
+      <div className="container">
+        <AddSaldoInicial setSaldoInicial={setSaldoInicial} />
+        {!openModal && <Balance />}
+        {!openModal && <IncomeExpenses saldoInicial={saldoInicial}/>}
+        {!openModal && <TransactionList openModal={openModal} setOpenModal={setOpenModal} />}
+        {!openModal && <AddTransaction edit={edit} setEdit={setEdit}/>}
+        { openModal && <EditModal openModal={openModal} setOpenModal={setOpenModal} edit={edit} setEdit={setEdit}></EditModal>}
+      </div>
+    </GlobalProvider>
   );
 }
 
